@@ -80,7 +80,7 @@ app.put('/todos/:id', (req, res) => {
         });
 });
 
-// DELETE /todos/:id - Deletes an exsisting 
+// DELETE /todos/:id - Delete a to-do item
 app.delete('/todos/:id', (req, res) => {
     const { id } = req.params;
 
@@ -96,22 +96,14 @@ Question 2: Implement a "Complete All" Endpoint
 example usage: 
 curl -X PUT http://localhost:3000/todos/complete-all
 */
-
-// COMPLETE ALL
-app.put('/todos/complete-all', (req, res) => {
-    todos.forEach(todo => {
-      todo.completed = true;
-    });
-    res.json({ message: "All to-do items marked as completed." });
-  });
-
-  // PUT /todos/:id - Update an existing to-do item
+// PUT /todos/complete-all - Mark all to-do items as completed
 app.put('/todos/complete-all', (req, res) => {
     db.run("UPDATE todos SET completed = 1", function (err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: "All to-do items marked as completed" });
     });
-});
+}); 
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
