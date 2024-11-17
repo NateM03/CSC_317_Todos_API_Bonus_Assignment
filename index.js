@@ -17,14 +17,12 @@ let todos = [
 // GET /todos - Retrieve all to-do items
 app.get('/todos', (req, res) => {
     const { completed } = req.query;
-
     if (completed !== undefined) {
-        const filteredTodos = todos.filter(todo => todo.completed.toSting() == completed);
+        const filteredTodos = todos.filter(todo => todo.completed === (completed === 'true'));
         return res.json(filteredTodos);
     }
-  res.json(todos);
+    res.json(todos);
 });
-
 
 /* 
 Q.3"
@@ -37,14 +35,21 @@ already implemented here to test this new GET endpoint!
 
 // POST /todos - Add a new to-do item
 app.post('/todos', (req, res) => {
-  const newTodo = {
-    id: todos.length + 1,
-    task: req.body.task,
-    completed: false,
-    priority: req.body.priority || "medium" // Set default priority
-  };
-  todos.push(newTodo);
-  res.status(201).json(newTodo);
+    const allowedPriorities = ["high", "medium", "low"];
+    const priority = req.body.priority || "medium";
+
+    if (!allowedPriorities.includes(priority)) {
+        return res.status(400).send("Invalid priority value");
+    }
+
+    const newTodo = {
+        id: todos.length + 1,
+        task: req.body.task,
+        completed: false,
+        priority
+    };
+    todos.push(newTodo);
+    res.status(201).json(newTodo);
 });
 
 // PUT /todos/:id - Update an existing to-do item
