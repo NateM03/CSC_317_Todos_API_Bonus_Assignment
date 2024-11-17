@@ -40,7 +40,8 @@ app.post('/todos', (req, res) => {
   const newTodo = {
     id: todos.length + 1,
     task: req.body.task,
-    completed: false
+    completed: false,
+    priority: req.body.priority || "medium" // Set default priority
   };
   todos.push(newTodo);
   res.status(201).json(newTodo);
